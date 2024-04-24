@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import {
   BrowserRouter, Routes, Route, NavLink, useParams,
 } from 'react-router-dom';
+import Counter from './components/counter';
+import Controls from './components/controls';
 import './style.scss';
 
 function About(props) {
@@ -10,7 +12,12 @@ function About(props) {
 }
 
 function Welcome(props) {
-  return <div>Welcome</div>;
+  return (
+    <div>
+      <Counter />
+      <Controls />
+    </div>
+  );
 }
 
 function Nav(props) {
