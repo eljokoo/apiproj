@@ -6,6 +6,7 @@ export default function createGameSlice(set, get) {
     playerHand: [],
     dealerScore: 0,
     playerScore: 0,
+    cardsDealt: 0,
     deckID: '',
     dealerDrawCard: async (number) => {
       try {
@@ -28,6 +29,8 @@ export default function createGameSlice(set, get) {
         console.log('Error drawing card', error);
         throw error;
       }
+
+      return get().gameSlice.dealerScore;
     },
     playerDrawCard: async (number) => {
       try {
@@ -50,6 +53,8 @@ export default function createGameSlice(set, get) {
         console.log('Error drawing card', error);
         throw error;
       }
+
+      return get().gameSlice.playerScore;
     },
     setDeckID: async (deckID) => {
       await set(({ gameSlice: draftState }) => { draftState.deckID = deckID; });
@@ -63,17 +68,6 @@ export default function createGameSlice(set, get) {
         draftState.playerScore = 0;
         shuffleDeck(get().gameSlice.deckID);
       });
-    },
-    checkWinner: () => {
-      if (get().gameSlice.playerScore > 21) {
-        return { gameOver: true, winner: 'Dealer' };
-      } else if (get().gameSlice.dealerScore > 21) {
-        return { gameOver: true, winner: 'Player' };
-      } else if (get().gameSlice.playerScore > get().gameSlice.dealerScore) {
-        console.log('Player wins');
-      }
-
-      return false;
     },
   };
 }
