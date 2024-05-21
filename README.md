@@ -1,8 +1,8 @@
-# Front-end Starterpack
+# 
 
-Starterpack for future projects with Vite.
 
-[deployed url](https://frontend-starterpack-eljokoo.onrender.com)
+
+[deployed url]()
 
 ## What Worked Well
 
