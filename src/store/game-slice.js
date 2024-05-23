@@ -1,4 +1,7 @@
-import { drawCards, shuffleDeck } from '../services/card-api';
+import {
+  // eslint-disable-next-line no-unused-vars
+  drawCards, shuffleDeck, initializeDeck,
+} from '../services/card-api';
 
 export default function createGameSlice(set, get) {
   return {
@@ -11,8 +14,13 @@ export default function createGameSlice(set, get) {
     dealerDrawCard: async (number) => {
       try {
         const cards = await drawCards(get().gameSlice.deckID, number);
+
+        // await changing states
         await set(({ gameSlice: draftState }) => {
+          // add cards to dealer's hand
           draftState.dealerHand.push(...cards.cards);
+
+          // calculate dealer's score
           cards.cards.forEach((card) => {
             let tempValue = card.value;
 
@@ -30,13 +38,19 @@ export default function createGameSlice(set, get) {
         throw error;
       }
 
+      // after all is done, return dealer's score
       return get().gameSlice.dealerScore;
     },
     playerDrawCard: async (number) => {
       try {
         const cards = await drawCards(get().gameSlice.deckID, number);
+
+        // await changing states
         await set(({ gameSlice: draftState }) => {
+          // add cards to player's hand
           draftState.playerHand.push(...cards.cards);
+
+          // calculate player's score
           cards.cards.forEach((card) => {
             let tempValue = card.value;
 
@@ -54,14 +68,17 @@ export default function createGameSlice(set, get) {
         throw error;
       }
 
+      // after all is done, return player's score
       return get().gameSlice.playerScore;
     },
-    setDeckID: async (deckID) => {
-      await set(({ gameSlice: draftState }) => { draftState.deckID = deckID; });
-      console.log('Deck ID set', deckID);
+    setDeckID: async () => {
+      // await setting deck ID
+      const newDeck = await initializeDeck();
+      // const newDeck = { deck_id: 'wfbxt5bp483b' };
+      await set(({ gameSlice: draftState }) => { draftState.deckID = newDeck.deck_id; });
     },
     clearAll: async () => {
-      set(({ gameSlice: draftState }) => {
+      await set(({ gameSlice: draftState }) => {
         draftState.dealerHand = [];
         draftState.playerHand = [];
         draftState.dealerScore = 0;
